@@ -174,7 +174,7 @@ function(a, b) {
 function(file, res) {
    # Retrieve the filename
   filename <- names(file)[1]
-  save_path <- "/Users/apple/Desktop/MLWebApp/DSAA_23/webserver_code/test-shreyas"
+  save_path <- "./dump"
   file_target <- file.path(save_path, filename)
   # Retrieve the file contents
   file_contents <- file$raw

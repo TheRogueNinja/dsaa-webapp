@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import FileUploadSingle from './FileUploadSingle';
-import Switch from './Switch';
 
 function App() {
-  const [graphView, setGraphView] = useState(false);
+  const [graphView] = useState(false);
   return (
     <>
       <div>

@@ -1,12 +1,14 @@
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import PlotRealImp from './PlotRealImp';
 import PlotImagImp from './PlotImagImp';
 import Switch from './Switch';
 import DataTable from './Datatable';
+import Spinner from './Spinner';
 function FileUploadSingle({ graphView }) {
   const [file, setFile] = useState(null);
   const [plotData, setPlotData] = useState(null);
   const [value, setValue] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const handleFileChange = (e) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
@@ -14,6 +16,7 @@ function FileUploadSingle({ graphView }) {
   };
 
   const handleUploadClick = () => {
+    setIsUploading(true);
     if (!file) {
       return;
     }
@@ -30,6 +33,7 @@ function FileUploadSingle({ graphView }) {
       .then((data) => {
         console.log(data)
         setPlotData(data)
+        setIsUploading(false);
       })
       .catch((err) => console.error(err));
   };
@@ -39,7 +43,7 @@ function FileUploadSingle({ graphView }) {
       <div>
         <input type="file" onChange={handleFileChange} />
         <div>{file && `${file.name} - ${file.type}`}</div>
-        <button onClick={handleUploadClick}>Upload</button>
+        <button onClick={handleUploadClick} disabled={isUploading}>{isUploading ? <Spinner /> : 'Upload'}</button>
       </div>
       <Switch
         isOn={value}

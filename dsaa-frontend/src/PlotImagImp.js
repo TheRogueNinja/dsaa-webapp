@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Plot from 'react-plotly.js'
 function PlotImagImp({data}) {
     const input_data = data.graph_data;

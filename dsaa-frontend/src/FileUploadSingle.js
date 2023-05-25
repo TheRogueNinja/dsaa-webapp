@@ -25,7 +25,7 @@ function FileUploadSingle({ graphView }) {
     formData.append('file', file);
 
     // Uploading the file using the fetch API to the server
-    fetch('http://143.110.235.151:8000/upload', {
+    fetch('https://204.48.28.66/upload', {
       method: 'POST',
       body: formData,
     })

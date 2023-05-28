@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import './Datatable.css'
 function DataTable({ data, rowsPerPage }) {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(data.length / rowsPerPage);

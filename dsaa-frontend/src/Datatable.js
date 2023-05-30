@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import './Datatable.css'
+import React, { useState, useRef } from 'react';
+import './Datatable.css';
+
 function DataTable({ data, rowsPerPage }) {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(data.length / rowsPerPage);
@@ -12,8 +13,18 @@ function DataTable({ data, rowsPerPage }) {
     setCurrentPage(pageNumber);
   };
 
+  const tableRef = useRef(null);
+
+  const handleScroll = () => {
+    const { scrollTop } = tableRef.current;
+    const thead = tableRef.current.querySelector('thead');
+    if (thead) {
+      thead.style.transform = `translateY(${scrollTop}px)`;
+    }
+  };
+
   return (
-    <div>
+    <div className="table-container" onScroll={handleScroll} ref={tableRef}>
       <table>
         <thead>
           <tr>
@@ -22,16 +33,21 @@ function DataTable({ data, rowsPerPage }) {
             ))}
           </tr>
         </thead>
-        <tbody>
-          {currentData.map((item, index) => (
-            <tr key={index}>
-              {Object.values(item).map((value, index) => (
-                <td key={index}>{value}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
       </table>
+
+      <div className="table-body">
+        <table>
+          <tbody>
+            {currentData.map((item, index) => (
+              <tr key={index}>
+                {Object.values(item).map((value, index) => (
+                  <td key={index}>{value}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <div>
         {Array.from({ length: totalPages }, (_, index) => index + 1).map(

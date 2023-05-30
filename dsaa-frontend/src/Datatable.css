@@ -1,10 +1,14 @@
 .table-container {
     margin-top: 20px;
+    overflow: auto;
+    max-height: calc(100vh - 200px);
+    position: relative; /* Add relative positioning */
   }
   
   table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed; /* Add fixed table layout */
   }
   
   thead th {
@@ -12,11 +16,18 @@
     color: white;
     padding: 10px;
     text-align: left;
+    position: sticky; /* Add sticky positioning */
+    top: 0; /* Stick to the top */
+    z-index: 1; /* Ensure the header is above the table body */
   }
   
   tbody td {
     border-bottom: 1px solid #ccc;
     padding: 10px;
+    word-break: break-word; /* Add word break for long content */
+    max-width: 150px; /* Set a maximum width for cells */
+    white-space: pre-wrap; /* Preserve line breaks */
+    overflow-wrap: break-word; /* Break words on overflow */
   }
   
   button {
@@ -30,10 +41,14 @@
   }
   
   button:hover {
-    background-color: #936edf; /* Adjusted hover background color */
+    background-color: #936edf;
   }
   
   button:focus {
     outline: none;
+  }
+  
+  .table-body {
+    margin-top: 38px; /* Adjust the margin to prevent overlapping with the header */
   }
   

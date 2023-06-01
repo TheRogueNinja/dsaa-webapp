@@ -1,69 +1,120 @@
 import React, { useState, useRef } from 'react';
-import './Datatable.css';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+} from '@material-ui/core';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
-function DataTable({ data, rowsPerPage }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(data.length / rowsPerPage);
+const useStyles = makeStyles((theme) => ({
+  tableContainer: {
+    marginTop: 20,
+    overflow: 'auto',
+    maxHeight: 'calc(100vh - 200px)',
+    position: 'relative',
+  },
+  table: {
+    tableLayout: 'fixed',
+  },
+  tableHeader: {
+    backgroundColor: '#782ed9',
+    color: 'white',
+    padding: theme.spacing(1),
+    textAlign: 'left',
+    position: 'sticky',
+    top: 0
+  },
+  tableCell: {
+    borderBottom: `1px solid ${theme.palette.divider}`,
+    padding: theme.spacing(1),
+    wordBreak: 'break-word',
+    maxWidth: 150,
+    whiteSpace: 'pre-wrap',
+    overflowWrap: 'break-word',
+  },
+  sortIcon: {
+    fontSize: '1rem',
+    marginLeft: theme.spacing(0.5),
+  },
+}));
 
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const endIndex = startIndex + rowsPerPage;
-  const currentData = data.slice(startIndex, endIndex);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+
+function DataTable({ data }) {
+  const [sortColumn, setSortColumn] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
+  
+  const handleSort = (column) => {
+    if (column === sortColumn) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortOrder('asc');
+    }
   };
 
+  const sortedData = React.useMemo(() => {
+    let sorted = [...data];
+    if (sortColumn) {
+      sorted = sorted.sort((a, b) => {
+        const valA = a[sortColumn];
+        const valB = b[sortColumn];
+        if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
+        if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+    return sorted;
+  }, [data, sortColumn, sortOrder]);
+
+  const classes = useStyles();
   const tableRef = useRef(null);
 
   const handleScroll = () => {
     const { scrollTop } = tableRef.current;
-    const thead = tableRef.current.querySelector('thead');
-    if (thead) {
-      thead.style.transform = `translateY(${scrollTop}px)`;
+    const tbody = tableRef.current.querySelector('.table-body');
+    if (tbody) {
+      tbody.scrollTop = scrollTop;
     }
   };
 
   return (
-    <div className="table-container" onScroll={handleScroll} ref={tableRef}>
-      <table>
-        <thead>
-          <tr>
+    <div className={classes.tableContainer} onScroll={handleScroll} ref={tableRef}>
+      <Table className={classes.table}>
+        <TableHead>
+          <TableRow>
             {Object.keys(data[0]).map((key) => (
-              <th key={key}>{key}</th>
+              <TableCell
+                key={key}
+                className={classes.tableHeader}
+                onClick={() => handleSort(key)}
+              >
+                {key}
+                {sortColumn === key && (
+                  <span className={classes.sortIcon}>
+                    {sortOrder === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                  </span>
+                )}
+              </TableCell>
             ))}
-          </tr>
-        </thead>
-      </table>
-
-      <div className="table-body">
-        <table>
-          <tbody>
-            {currentData.map((item, index) => (
-              <tr key={index}>
-                {Object.values(item).map((value, index) => (
-                  <td key={index}>{value}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div>
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-          (pageNumber) => (
-            <button
-              key={pageNumber}
-              onClick={() => handlePageChange(pageNumber)}
-              style={{
-                fontWeight: pageNumber === currentPage ? 'bold' : 'normal',
-              }}
-            >
-              {pageNumber}
-            </button>
-          )
-        )}
-      </div>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {sortedData.map((item, index) => (
+            <TableRow key={index}>
+              {Object.values(item).map((value, index) => (
+                <TableCell key={index} className={classes.tableCell}>
+                  {value}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }

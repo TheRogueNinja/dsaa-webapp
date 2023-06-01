@@ -1,5 +1,6 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { useMediaQuery } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
@@ -11,6 +12,7 @@ import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import EmailIcon from '@material-ui/icons/Email';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import FileUploadSingle from './FileUploadSingle';
+import Demotab from './Demotab';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,12 +20,10 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
     },
     cardContainer: {
-        display: 'flex',
-        // flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        alignItems: 'stretch',
-        height: '100vh',
-        overflow: 'auto',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: theme.spacing(2),
+        marginBottom: theme.spacing(2),
     },
     card: {
         flex: '0 0 calc(33.33% - 16px)',
@@ -59,7 +59,6 @@ const useStyles = makeStyles((theme) => ({
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-
     return (
         <div
             role="tabpanel"
@@ -84,16 +83,21 @@ function Apptabs() {
         setValue(newValue);
     };
     const classes = useStyles();
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     return (<>
         <Tabs
             value={value}
             onChange={handleChange}
             indicatorColor="primary"
             textColor="primary"
-            centered
+            centered={!isSmallScreen} // Centered tabs for larger screens
+            variant={isSmallScreen ? 'scrollable' : 'standard'} // Scrollable tabs for smaller screens
+            scrollButtons={isSmallScreen ? 'auto' : 'off'} // Show scroll buttons for smaller screens
         >
             <Tab label="About the App" />
-            <Tab label="Try our App" />
+            <Tab label="Predict Impedance" />
+            <Tab label="Sample results" />
             <Tab label="Authors & Contributors" />
         </Tabs>
         <TabPanel value={value} index={0}>
@@ -101,30 +105,21 @@ function Apptabs() {
                 <CardContent className={classes.cardContent}>
                     <h3>What is CRISP?</h3>
                     <p>
-                    Lithium-ion batteries (LiBs), the energy-dense electrochemical devices ubiquitous in mobile energy applications, are nearing their theoretical energy density limits, with many aspects still poorly understood. This research introduces an innovative application of Artificial Intelligence (AI) to Electrochemical Impedance Spectroscopy (EIS) measurements, aiming to accelerate innovation in LiBs performance and safety. Our method, the Comprehensive Regression for Impedance Spectroscopy Prediction (CRISP), employs AI to significantly enhance EIS measurements across a broad impedance spectrum, including extra low frequencies (ELF). CRISP predicts real and imaginary parts of impedance behavior, Z, using a modest data set. Tested over varying charging states, CRISP exhibits speed and accuracy, particularly in challenging ELF regions. Built efficiently without specialized hardware or libraries, CRISP is adaptable for human-in-the-loop operations, if needed. This pioneering work offers substantial promise for online monitoring and characterizing LiBs, potentially hastening advancements in LiBs technology
+                        Lithium-ion batteries (LiBs), the energy-dense electrochemical devices ubiquitous in mobile energy applications, are nearing their theoretical energy density limits, with many aspects still poorly understood. This research introduces an innovative application of Artificial Intelligence (AI) to Electrochemical Impedance Spectroscopy (EIS) measurements, aiming to accelerate innovation in LiBs performance and safety. Our method, the Comprehensive Regression for Impedance Spectroscopy Prediction (CRISP), employs AI to significantly enhance EIS measurements across a broad impedance spectrum, including extra low frequencies (ELF). CRISP predicts real and imaginary parts of impedance behavior, Z, using a modest data set. Tested over varying charging states, CRISP exhibits speed and accuracy, particularly in challenging ELF regions. Built efficiently without specialized hardware or libraries, CRISP is adaptable for human-in-the-loop operations, if needed. This pioneering work offers substantial promise for online monitoring and characterizing LiBs, potentially hastening advancements in LiBs technology
                     </p>
-                </CardContent>
-            </Card>
-
-            <Card className={classes.card}>
-                <CardContent className={classes.cardContent}>
-                    <h3>How to use the App?</h3>
-                    <ol>
-                        <li>Click on 'Demo' tab and download the template file by clicking on 'Download Template'</li>
-                        <li>You can add/edit the file with your findings but ensure that the column names are untouched</li>
-                        <li>Once you have your data ready click on choose file to select and upload your file and click on upload</li>
-                        <li>You can see the results generated in the below table</li>
-                        <li>If you wish to see the results as 3D graphical representation, check the show graphs switch</li>
-                    </ol>
                 </CardContent>
             </Card>
         </TabPanel>
         <TabPanel value={value} index={1}>
-            <h2>Test the Findings</h2>
+            <h2>Predict Impedance</h2>
             <FileUploadSingle graphView={false} plotData={plotData} setPlotData={setPlotData} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-            <h2>Authors & Contributors</h2>
+            <h2 style={{ textAlign: 'center' }}>Sample Results</h2>
+            <Demotab />
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+            <h2 style={{ textAlign: 'center' }}>Authors & Contributors</h2>
             <div className={classes.cardContainer}>
                 <Card className={classes.card}>
                     <CardMedia

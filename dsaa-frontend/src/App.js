@@ -15,9 +15,10 @@ function App() {
     <div className={classes.root}>
       <h2 style={{ textAlign: 'center' }}>
          <Battery />
-          Web App to simulate CRISP 
+         CRISP
          <Battery />
       </h2>
+      <h2 style={{ textAlign: 'center' }}>Comprehensive Regression for Impedance Spectroscopy Prediction over ELF Regions using AI</h2>
       <Apptabs />
     </div>
   );

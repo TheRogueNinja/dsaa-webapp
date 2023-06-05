@@ -7,7 +7,7 @@ function Demotab() {
     return (
         <>
             <div style={{ borderTop: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '10px' }}>
-            <p>You can interact with the below graphs as they are 3Dimensional; Also you can hover to find the trace values</p>
+            <p style={{textAlign: 'center'}}>Graphs are interactive; Also you can hover to find the trace values</p>
                 <div
                     style={{
                         border: '1px solid #ccc',

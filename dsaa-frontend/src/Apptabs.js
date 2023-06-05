@@ -111,7 +111,7 @@ function Apptabs() {
             </Card>
         </TabPanel>
         <TabPanel value={value} index={1}>
-            <h2>Predict Impedance</h2>
+            <h2 style={{ textAlign: 'center' }}>Predict Impedance</h2>
             <FileUploadSingle graphView={false} plotData={plotData} setPlotData={setPlotData} />
         </TabPanel>
         <TabPanel value={value} index={2}>

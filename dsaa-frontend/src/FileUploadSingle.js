@@ -28,6 +28,11 @@ const useStyles = makeStyles((theme) => ({
   cardContent: {
       flexGrow: 1,
       overflow: 'auto',
+  },
+  hyperlink: {
+    color: 'blue',
+    textDecoration: 'underline',
+    cursor: 'pointer'
   }
 }));
 
@@ -35,7 +40,6 @@ function FileUploadSingle({ graphView, plotData, setPlotData }) {
   const [file, setFile] = useState(null);
   const [value, setValue] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [isCardExpanded, setIsCardExpanded] = useState(false);
   const classes = useStyles();
   const handleFileChange = (e) => {
     if (e.target.files) {
@@ -80,9 +84,6 @@ function FileUploadSingle({ graphView, plotData, setPlotData }) {
       .catch((err) => console.error(err));
   };
 
-  const handleCardToggle = () => {
-    setIsCardExpanded(!isCardExpanded);
-  };
   return (
     <>
       <div>
@@ -98,9 +99,6 @@ function FileUploadSingle({ graphView, plotData, setPlotData }) {
                   Upload
                 </button>
               </div>
-              <div style={{ marginRight: '10px' }}>
-                <button onClick={downloadTemplate}>Download Template</button>
-              </div>
             </form>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
               <label htmlFor="toggleSwitch" style={{ marginRight: '10px' }}>Toggle View:</label>
@@ -109,18 +107,16 @@ function FileUploadSingle({ graphView, plotData, setPlotData }) {
             </CardContent>
           </Card>
           <div>
-          <Card className={classes.card} onClick={handleCardToggle}>
+          <Card className={classes.card}>
           <CardContent className={classes.cardContent}>
             <h3>How to use the App?</h3>
-            {isCardExpanded && (
-              <ol>
-                <li>Download the template file by clicking on 'Download Template'</li>
+            <ol>
+                <li onClick={downloadTemplate} className={classes.hyperlink}>Download this sample input file</li>
                 <li>You can add/edit the file with your findings but ensure that the column names are untouched</li>
                 <li>Once you have your data ready click on choose file to select and upload your file and click on upload</li>
                 <li>You can see the results generated in the below table</li>
                 <li>If you wish to see the results as 3D graphical representation, check the show graphs switch</li>
               </ol>
-            )}
           </CardContent>
         </Card>
           </div>
@@ -151,8 +147,6 @@ function FileUploadSingle({ graphView, plotData, setPlotData }) {
           </div>
         ) : (
           <div>
-            <h1>Predicted Data</h1>
-            {plotData && <DataTable data={plotData.pred_data} rowsPerPage={25} />}
             <div>
               <h1>Regenerated Data</h1>
               {plotData && <DataTable data={plotData.graph_data} rowsPerPage={25} />}

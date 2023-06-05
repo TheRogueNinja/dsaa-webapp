@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     textAlign: 'left',
     position: 'sticky',
-    top: 0
+    top: 0,
+    cursor: 'pointer'
   },
   tableCell: {
     borderBottom: `1px solid ${theme.palette.divider}`,

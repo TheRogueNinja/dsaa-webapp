@@ -17,7 +17,7 @@ RUN R -e "packages <- c('RcppEigen','ranger','plumber','ggplot2','dplyr','kknn',
 COPY / /
 
 # # open port 80 to traffic
-EXPOSE 8000
+EXPOSE 9001
 
 # when the container starts, start the main.R script
 ENTRYPOINT ["Rscript", "server.R"]
